@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shell Scripting</title>
+</head>
+<body>
+    <h3>Shell Scripting</h3>
+    <ol>
+        <li>Understanding the Basics
+            <ol>
+                <li>Shell scripting is writing a sequence of commands in a file to be executed by the shell (command-line interpreter). It's used to automate repetitive tasks, streamline processes, and interact with the system.
+                    <ul>
+                        <li><code>ssh -i ~/Developer/Lakshmi/MyLinuxKey.pem ubuntu@$1
+                        </code></li>
+                        <li> To execute the file with arguments .</li>
+                        <li><code>
+                            ./SSH.sh 65.1.134.70
+                        </code>fileName IPAddressOfTheUbuntu</li>
+                        <li>ubuntu machine is connected</li>
+                        <li>Positional Parameters are used to pass arguments to the script
+                            <code>
+                                ./myscript.sh arg1 arg2
+                            </code>
+                            In the script, access them as `$1`, `$2`, etc. `$0` is the script name.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <code>echo $SHELL</code>: To know the type of shell we are using.
+                </li>
+                <li>
+                    A shell script file usually has the `.sh` extension. The first line should be the **shebang** (`#!/bin/bash`), which tells the system to use Bash to interpret the script.
+                </li>
+                <li>
+                    <code> 
+                     chmod +x hello.sh   # Make it executable
+                    ./hello.sh          # Run the script
+                    sh hello.sh       # To execute the file
+                    </code>
+                </li>
+                <li><code>
+                    scp -i ~/Developer/Lakshmi/MyLinuxKey.pem  ~/Developer/Lakshmi/Practice/ShellScriptingCommands/Variable.sh  ubuntu@65.1.134.70:/home/ubuntu
+                </code>: To send a file from local machine to another machine
+            </li>
+            </ol>
+        </li>
+        <li>Variables and Data Types
+            <ol>
+                <li><b>Defining Variables </b>:
+                    Variables in shell scripting don’t need explicit data types. They can store strings, numbers, or commands. <br>
+                     <code>     name="DevOps"
+                        echo "Hello, $name"
+                    </code>
+                </li>
+                <li><b>Command Substitution</b> : 
+                    Use backticks or `$()` to store the output of a command in a variable. <br>
+                    <code>
+                        date=$(date)
+                        echo "Today is $date"
+                    </code>
+                </li>
+                <li>
+                    Positional Parameters are used to pass arguments to the script
+                    <code>
+                        ./myscript.sh arg1 arg2
+                    </code>
+                    In the script, access them as `$1`, `$2`, etc. `$0` is the script name.
+                </li>
+            </ol>
+        </li>
+        <li>Control Structures:
+            <ol>Shell scripts have control structures like any programming language.
+                <li><b>If-Else Statement:</b> <br>
+                <code>
+                    if [ $age -ge 18 ]; then <br>
+                        &nbsp; echo "You are an adult." <br>
+                  else <br>
+                    &nbsp; echo "You are a minor." <br>
+                   fi <br>
+                </code>
+                The `[` is a test command and can be replaced with `[[` for more advanced tests.
+                </li>
+                <li><b>Loops </b>
+                    <ol>
+                        <li> <b></b>For Loop  <br>
+                            <code>
+                                #!/bin/bash <br>
+                                for i in {1..5}; do<br>
+                                    echo "Number: $i"<br>
+                                done
+                            </code>
+                        </li>
+                        <li>While Loop <br>
+                            <code>
+                                #!/bin/bash<br>
+                                count=1<br>
+                                while [ $count -le 5 ]; do <br>
+                                    echo "Count: $count" <br>
+                                    ((count++)) # short hand for count=$((count + 1)) <br>
+                                done
+                            </code>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </li>
+        <li>Functions in Shell Scripts
+            <ol>Functions help organize your code and avoid repetition.
+                <li>
+                    <code>
+                        greet() { <br>
+                            echo "Hello, $1" <br>
+                          } <br>
+                       
+                          greet "User" <br>
+                          greet "Naga" <br>
+                    </code>
+                </li>
+            </ol>
+        </li>
+        <li>Error Handling
+            <ol><b>Exit Codes</b>: Every command returns an exit status (0 for success, non-zero for failure). You can access it via `$?`
+            <li>
+                <code>
+                        #!/bin/bash <br>
+        
+                         ls <br>
+
+                         if [ $? -eq 0 ]; then <br>
+                             echo "ls command Success!" <br>
+                         else <br>
+                              echo "ls command Failure!" <br>
+                         fi <br>
+                </code>
+            </li>
+            <li>
+                <code>
+                    #!/bin/bash <br>
+    
+                     mkdir <br>
+
+                     if [ $? -eq 0 ]; then <br>
+                         echo "mkdir command Success!" <br>
+                     else <br>
+                          echo "mkdir command Failure!" <br>
+                     fi <br>
+            </code>
+            </li>
+            <li>Trap Command:
+                <ol>Trap is used to catch signals and errors to perform cleanup actions.
+                    <li>Syntax of the ‘Trap’ command <br>
+                        <code>
+                        trap [-options] "piece of code" [signal name or value]
+                    </code>
+                    </li>
+                    <li><code>trap -l</code>: To list the signals</li>
+                    <li><code>trap - p</code>: To list the User created traps </li>
+                    <li><code>trap - signalID</code>: To remove trap </li>
+                    <li><code>
+                        trap "echo 'Ctrl+C pressed'; exit"  SIGINT <br>
+                        while :; do <br>
+                          echo "Working..." <br>
+                          sleep 1 <br>
+                        done
+                    </code></li>
+                    <li>In above code while is a infinate loop so on executeing this code there is an echo of Working for every second. In the above code there is a trap to signal id 2 on clicking ctrl + c trap code will be executed.</li>
+                    <li>Function in trap :
+                        We can also trigger different function calls in response to different signals with the help of a trap command. Run the following script as a background process. <br>
+                    <code>
+                        file bashTrap.sh
+                    </code>
+                    </li>
+                    <li>The trap command in Bash is used to execute specific code when a signal is received by a script. It helps handle interruptions or terminations by running predefined commands, such as cleanup operations or custom responses to signals like SIGINT or SIGTERM.</li>
+                </ol>
+            </li>
+        </ol>
+        </li>
+       <li>Working with Files and Directories
+        <ol>
+            <li>File Manipulation:
+                You can create, read, and modify files directly from a script.
+                <ol>
+                    <li><code>echo "Hello" > file.txt  # Write to a file</code></li>
+                    <li><code>cat file.txt</code> :  # Read the file</li>
+                    <li><code>echo "HelloWorld" >> file.txt </code> : will append the text to file.txt file</li>
+                </ol>
+
+            </li>
+            <li>Checking Files : <br>
+                <code>
+                    if [ -f file.txt ]; then <br>
+                    echo "File exists." <br>
+                  fi <br>
+                </code>
+            </li>
+            <li>Directory Manipulation : <br>
+            <ol>
+                <li> <code>mkdir mydir </code> # Create a directory</li>
+                <li><code> cd mydir</code> # Navigate to the directory</li>
+            </ol>
+            </li>
+
+        </ol>
+       </li>
+       <li>Debugging Shell Scripts :
+        <ol>
+            <li><code>set -x </code>: This prints each command before executing it</li> 
+            <li>Echo for Debugging: Use `echo` to print variable values and track script flow.</li>
+        </ol>
+       </li>
+       <li>Advanced Topics
+        <ol>
+            <li>
+                Arrays : Bash supports one-dimensional arrays.
+                <code>
+                    arr=("apple" "banana" "cherry") <br>
+                    echo ${arr[0]}   # Access array elements
+                    <br>
+                </code>
+            </li>
+            <li>Pipelines and Redirections:
+                Combine commands with pipes and manage input/output. <br>
+                <code>
+                    ls | grep ".txt"  
+                </code> # Pipe output of ls to grep
+            </li>
+            <li><code>command > file.txt</code>: # Redirect output to a file</li>
+            <li><code>command >> file.txt  </code> # Append output to a file</li>
+            <li>Process Management:
+                Run commands in the background with `&`, and use `jobs`, `ps`, and `kill` to manage them. <br>
+                <code>
+                    kill -9 PID
+                </code>
+            </li>
+        </ol>
+       </li>
+       <li>Best Practices
+        <ol>
+            <li>Use comments (`#`) to explain complex parts of the code.</li>
+            <li>Modularize your scripts** using functions</li>
+            <li>Check for errors by testing exit codes and using conditional statements.</li>
+            <li> Follow naming conventions for variables and files for clarity.</li>
+            <li>Version control your scripts using Git</li>
+        </ol>
+       </li>
+    </ol>
+</body>
+</html>

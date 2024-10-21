@@ -1,0 +1,1 @@
+We can create ,read,and modify files directly from a script
