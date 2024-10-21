@@ -245,6 +245,108 @@
             <li>Version control your scripts using Git</li>
         </ol>
        </li>
+       <li>How to Create Cron Jobs
+            <ol>About Cron jobs
+                <p>Cron jobs are a powerful feature of Unix-like operating systems that allow you to automate tasks by scheduling scripts or commands to run at specific intervals. Cron is driven by the **crontab** (cron table) file, which contains the scheduling details.
+                </p>
+                <li>Understanding Cron Jobs :A cron job is essentially a command or a script that is scheduled to run periodically on the server. It can be scheduled to run every minute, hour, day, month, or even year.
+                </li>
+                <li>
+                    Basic syntax of cron job:
+                    <code>
+                        *     *     *     *     *  <br>command_to_be_executed <br>
+                        |     |     |     |     | <br>
+                        |     |     |     |     +----- day of the week (0 - 7) (Sunday=0 or 7) <br>
+                        |     |     |     +----------- month (1 - 12) <br>
+                        |     |     +----------------- day of the month (1 - 31) <br>
+                        |     +----------------------- hour (0 - 23) <br>
+                        +----------------------------- minute (0 - 59) <br>
+                    </code>
+                </li>
+                <li>Steps to create cron job
+                    <ol>To create a cron job 
+                        <li>
+                            go to the Teriminal
+                        </li>
+                        <li>
+                            crontab -e
+                        </li>
+                        <li>
+                             <code> */1 * * * * /home/ubuntu/displayDateTime.sh </code>
+                             : To execute displayDateTime.sh file every minitue .
+                            
+                        </li>
+                        <li> 
+                            <code>*/1 * * * * /home/ubuntu/displayDateTime.sh >> cronlog.log  2>&1 </code>: To execute displayDateTime.sh file every minitue and store that data in cronlog.log file<br> 
+                        </li>
+                        <li> check on cronlog.log file weather   cronjobs  are working or not.
+                        </li>
+                    </ol>
+                </li>
+                <li>Cron job Example 
+                    <ol>Create another cron job which will delete all the files which are created same day
+                        <li>
+                            <ol>
+                                <li>touch cleanup.sh</li>
+                                <li>
+                                    <code>
+                                        #!/bin/bash <br>
+                                    </code>
+                                </li>
+                                <li>
+                                    <code>
+                                        find . -type f -mtime -1 -delete
+                                    </code>
+                                </li>
+                                <li>
+                                    */55 * * * * /home/ubuntu/testingDeletingTodaysFiles/cleanup.sh >>    cronlog.log  2>&1
+                                </li>
+                                <li>check on cronlog.log file weather cronjobs are working or not.</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    Managing cron jobs
+                    <ol>
+                        <li>To see the current user's cron jobs, use: <code> crontab -l</code></li>
+                        <li>To remove all cron jobs for the current user: <code> crontab -r</code></li>
+                        <li> Only root or users with sufficient privileges can edit crontab for another user. The following command allows root to edit another user’s crontab: 
+                            <code>
+                                sudo crontab -u username -e
+                            </code>
+                        </li>
+                    </ol>
+                </li>
+                <li>Debuging Cron jobs
+                    <ol>Cron jobs can fail for various reasons
+                        <li>log output: By default, cron sends output to the system log, but you can redirect output to a file
+                            <code>
+                                * * * * * /path/to/script.sh >> /var/log/myscript.log 2>&1
+                            </code>
+                        </li>
+                        <li>Check Cron Logs 
+                            Cron logs can help you understand whether the job ran or failed. Check cron logs using:
+                        <code>
+                            cat /var/log/syslog | grep CRON
+                        </code>
+                        </li>
+                        <li>Check for Permission Issues
+                            Ensure the script or command you are running has the correct permissions and paths. Also, ensure that the shell (if required) is properly defined in the script</li>
+                    </ol>
+                </li>
+                <li>
+                    Best Practices for Writing Cron Jobs
+                    <ol>
+                        <li>Use Absolute Paths: Always use full paths for commands and scripts to avoid errors.</li>
+                        <li>Handle Errors Gracefully: Ensure scripts handle errors and return exit codes. If needed, add error handling with logging or notifications.</li>
+                        <li>Test Your Jobs First: Before adding them to cron, run your scripts manually to verify they work</li>
+                        <li>Combine Crontab Entries: If possible, group similar tasks in a single script to avoid multiple cron jobs running at the same time</li>
+                    </ol>
+                </li>
+            </ol>
+       </li>
+
     </ol>
 </body>
 </html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creating Cron Jobs</title>
+</head>
+<body>
+    <h3>Creating Cron Jobs</h3>
+    <ol>To create a cron job 
+        <li>
+            go to the Teriminal
+        </li>
+        <li>
+            crontab -e
+        </li>
+        <li> <code> */1 * * * * /home/ubuntu/displayDateTime.sh </code>: To execute displayDateTime.sh file every minitue</li>
+        <li> 
+            <code>*/1 * * * * /home/ubuntu/displayDateTime.sh >> cronlog.log  2>&1 </code>: To execute displayDateTime.sh file every minitue and store that data in cronlog.log file<br> 
+        </li>
+        <li>check on cronlog.log file weather cronjobs are working or not.</li>
+    </ol>
+    <ol>Create a cron job which will delete all the files which are created same day
+        <li>
+            <ol>
+                <li>touch cleanup.sh</li>
+                <li>
+                    <code>
+                        #!/bin/bash <br>
+                    </code>
+                </li>
+                <li>
+                    <code>
+                        find . -type f -mtime -1 -delete
+                    </code>
+                </li>
+                <li>
+                    */55 * * * * /home/ubuntu/testingDeletingTodaysFiles/cleanup.sh >>    cronlog.log  2>&1
+                </li>
+                <li>check on cronlog.log file weather cronjobs are working or not.</li>
+            </ol>
+        </li>
+    </ol>
+</body>
+</html>
